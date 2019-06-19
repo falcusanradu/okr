@@ -1,0 +1,83 @@
+<div class="parentDiv">
+  <div class="allignLeft">
+    <h5>Objective</h5>
+    <h5>Quarter</h5>
+    <h5>Year</h5>
+  </div>
+  <div class="allignRight">
+    <p>{{ objective }}</p>
+    <ng-container>
+      <select>
+        <option *ngFor="let quarter of quarters" value="{{ quarter }}">
+          {{ quarter }}
+        </option>
+      </select>
+    </ng-container>
+    <p>{{ year }}</p>
+  </div>
+</div>
+<br />
+<!-- table T1 -->
+<table class="table-striped myTable">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>type</th>
+      <th>target</th>
+      <th>level of confidence</th>
+      <th>result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ks of keyResultList">
+      <td>
+        {{ ks.id }}
+      </td>
+      <td>
+        {{ ks.name }}
+      </td>
+      <td>
+        {{ ks.type }}
+      </td>
+      <td>
+        {{ ks.target }}
+      </td>
+      <td>
+        {{ ks.levelOfConfidence }}
+      </td>
+      <td>
+        {{ ks.result }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input id="idField" name="idField" [(ngModel)]="keyResult.id" />
+      </td>
+      <td>
+        <input id="idField" name="idField" [(ngModel)]="keyResult.name" />
+      </td>
+      <td>
+        <input id="idField" name="idField" [(ngModel)]="keyResult.type" />
+      </td>
+      <td>
+        <input id="idField" name="idField" [(ngModel)]="keyResult.target" />
+      </td>
+      <td>
+        <input
+          id="idField"
+          name="idField"
+          [(ngModel)]="keyResult.levelOfConfidence"
+        />
+      </td>
+      <td>
+        <input id="idField" name="idField" [(ngModel)]="keyResult.result" />
+      </td>
+    </tr>
+    <!--<ngb-pagination [collectionSize]="70" [(page)]="product" [boundaryLinks]="true"></ngb-pagination>-->
+  </tbody>
+</table>
+<button (click)="insert()">Add KS</button>
+
+<!-- right -->
+<div id="myRightDiv"></div>
