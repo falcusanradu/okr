@@ -52,26 +52,39 @@
     </tr>
     <tr>
       <td>
-        <input id="idField" name="idField" [(ngModel)]="keyResult.id" />
+        <input disabled id="idField" name="idField" [(ngModel)]="keyResult.id" />
       </td>
       <td>
         <input id="idField" name="idField" [(ngModel)]="keyResult.name" />
       </td>
       <td>
-        <input id="idField" name="idField" [(ngModel)]="keyResult.type" />
+        <!-- <input id="idField" name="idField" [(ngModel)]="keyResult.type" /> -->
+        <select
+        id="selectedTypeId"
+        (change)="selectType($event)">
+          <option
+          *ngFor="let type of types"
+          value="{{ type }}">
+            {{ type }}
+          </option>
+        </select>
       </td>
       <td>
         <input id="idField" name="idField" [(ngModel)]="keyResult.target" />
       </td>
       <td>
-        <input
-          id="idField"
-          name="idField"
-          [(ngModel)]="keyResult.levelOfConfidence"
-        />
+        <select
+        id="selectedOptionId"
+        (change)="selectLevelOfConfidence($event)">
+          <option
+          *ngFor="let lvl of levelsOfConfidence"
+          value="{{ lvl.levelOfConfidence }}">
+            {{ lvl }}
+          </option>
+        </select>
       </td>
       <td>
-        <input id="idField" name="idField" [(ngModel)]="keyResult.result" />
+        <input disabled id="idField" name="idField" [(ngModel)]="keyResult.result" />
       </td>
     </tr>
     <!--<ngb-pagination [collectionSize]="70" [(page)]="product" [boundaryLinks]="true"></ngb-pagination>-->
@@ -81,3 +94,5 @@
 
 <!-- right -->
 <div id="myRightDiv"></div>
+
+<div *ngIf="error" class="alert-danger">something went wrong</div>
