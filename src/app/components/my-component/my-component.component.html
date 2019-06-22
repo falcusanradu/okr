@@ -1,98 +1,182 @@
-<div class="parentDiv">
-  <div class="allignLeft">
-    <h5>Objective</h5>
-    <h5>Quarter</h5>
-    <h5>Year</h5>
+<div class="pageContainer">
+  <!-- left -->
+  <div class="leftContainer">
+    <div class="parentDiv">
+      <div class="allignLeft">
+        <h5>Objective</h5>
+        <h5>Quarter</h5>
+        <h5>Year</h5>
+      </div>
+      <div class="allignRight">
+        <p>{{ objective }}</p>
+        <ng-container>
+          <select>
+            <option *ngFor="let quarter of quarters" value="{{ quarter }}">
+              {{ quarter }}
+            </option>
+          </select>
+        </ng-container>
+        <p>{{ year }}</p>
+      </div>
+    </div>
+    <br />
+    <!-- table T1 -->
+    <table class="">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>name</th>
+          <th>type</th>
+          <th>target</th>
+          <th>level of confidence</th>
+          <th>result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ks of keyResultList">
+          <td>
+            {{ ks.id }}
+          </td>
+          <td>
+            {{ ks.name }}
+          </td>
+          <td>
+            {{ ks.type }}
+          </td>
+          <td>
+            {{ ks.target }}
+          </td>
+          <td [ngClass]="addClasses(ks)">
+            {{ ks.levelOfConfidence }}
+          </td>
+          <td>
+            {{ ks.result }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input
+              disabled
+              id="idField"
+              name="idField"
+              [(ngModel)]="keyResult.id"
+            />
+          </td>
+          <td>
+            <input id="idField" name="idField" [(ngModel)]="keyResult.name" />
+          </td>
+          <td>
+            <!-- <input id="idField" name="idField" [(ngModel)]="keyResult.type" /> -->
+            <select id="selectedTypeId" (change)="selectType($event)">
+              <option *ngFor="let type of types" value="{{ type }}">
+                {{ type }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input id="idField" name="idField" [(ngModel)]="keyResult.target" />
+          </td>
+          <td>
+            <select
+              id="selectedOptionId"
+              (change)="selectLevelOfConfidence($event)"
+            >
+              <option
+                *ngFor="let lvl of levelsOfConfidence"
+                value="{{ lvl.levelOfConfidence }}"
+              >
+                {{ lvl }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input
+              disabled
+              id="idField"
+              name="idField"
+              [(ngModel)]="keyResult.result"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="error" class="alert-danger">something went wrong</div>
+    <button (click)="insertKeyResult()" class="btn btn-default">
+      add KeyResult
+    </button>
   </div>
-  <div class="allignRight">
-    <p>{{ objective }}</p>
-    <ng-container>
-      <select>
-        <option *ngFor="let quarter of quarters" value="{{ quarter }}">
-          {{ quarter }}
-        </option>
-      </select>
-    </ng-container>
-    <p>{{ year }}</p>
+
+  <!-- right -->
+  <div class="rightContainer">
+    <table class="table-striped myTable">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>name</th>
+          <th>KR impactedKR impacted</th>
+          <th>Impact</th>
+          <th>Likelihood</th>
+          <th>score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of riskList">
+          <td>
+            {{ r.id }}
+          </td>
+          <td>
+            {{ r.name }}
+          </td>
+          <td *ngIf="r.keyResultimpacted">
+            {{ r.keyResultimpacted.id }}
+          </td>
+          <td *ngIf="!r.keyResultimpacted"></td>
+          <td>
+            {{ r.impact }}
+          </td>
+          <td>
+            {{ r.likelihood }}
+          </td>
+          <td [ngClass]="addClasses(r)">
+            {{ r.score }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input disabled [(ngModel)]="risk.id" />
+          </td>
+          <td>
+            <input [(ngModel)]="risk.name" />
+          </td>
+          <td>
+            <select (change)="selectImpactedKeyResults($event)">
+              <option *ngFor="let ks of keyResultList" value="{{ ks }}">
+                {{ ks.id }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <select (change)="selectImpact($event)">
+              <option *ngFor="let i of impact" value="{{ i }}">
+                {{ i }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <select (change)="selectLikelihood($event)">
+              <option *ngFor="let l of likeliHoods" value="{{ l }}">
+                {{ l }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input disabled [(ngModel)]="risk.score" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="insertRisk()" class="btn btn-default">
+      add KeyResult
+    </button>
   </div>
 </div>
-<br />
-<!-- table T1 -->
-<table class="table-striped myTable">
-  <thead>
-    <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>type</th>
-      <th>target</th>
-      <th>level of confidence</th>
-      <th>result</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let ks of keyResultList">
-      <td>
-        {{ ks.id }}
-      </td>
-      <td>
-        {{ ks.name }}
-      </td>
-      <td>
-        {{ ks.type }}
-      </td>
-      <td>
-        {{ ks.target }}
-      </td>
-      <td>
-        {{ ks.levelOfConfidence }}
-      </td>
-      <td>
-        {{ ks.result }}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <input disabled id="idField" name="idField" [(ngModel)]="keyResult.id" />
-      </td>
-      <td>
-        <input id="idField" name="idField" [(ngModel)]="keyResult.name" />
-      </td>
-      <td>
-        <!-- <input id="idField" name="idField" [(ngModel)]="keyResult.type" /> -->
-        <select
-        id="selectedTypeId"
-        (change)="selectType($event)">
-          <option
-          *ngFor="let type of types"
-          value="{{ type }}">
-            {{ type }}
-          </option>
-        </select>
-      </td>
-      <td>
-        <input id="idField" name="idField" [(ngModel)]="keyResult.target" />
-      </td>
-      <td>
-        <select
-        id="selectedOptionId"
-        (change)="selectLevelOfConfidence($event)">
-          <option
-          *ngFor="let lvl of levelsOfConfidence"
-          value="{{ lvl.levelOfConfidence }}">
-            {{ lvl }}
-          </option>
-        </select>
-      </td>
-      <td>
-        <input disabled id="idField" name="idField" [(ngModel)]="keyResult.result" />
-      </td>
-    </tr>
-    <!--<ngb-pagination [collectionSize]="70" [(page)]="product" [boundaryLinks]="true"></ngb-pagination>-->
-  </tbody>
-</table>
-<button (click)="insert()" class="btn btn-default">Add KS</button>
-
-<!-- right -->
-<div id="myRightDiv"></div>
-
-<div *ngIf="error" class="alert-danger">something went wrong</div>

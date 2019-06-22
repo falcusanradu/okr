@@ -1,3 +1,5 @@
+import { NumberValueAccessor } from "@angular/forms";
+
 export interface KeyResult {
   id: number;
   name: string;
@@ -5,4 +7,13 @@ export interface KeyResult {
   target: number;
   levelOfConfidence: number;
   result: number;
+}
+
+export interface Risk {
+  id: number;
+  name: string;
+  keyResultimpacted?: KeyResult;
+  impact: string;
+  likelihood: string;
+  score?: string;
 }
