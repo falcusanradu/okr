@@ -7,6 +7,7 @@ export interface KeyResult {
   target: number;
   levelOfConfidence: number;
   result: number;
+  initialLevelOfConfidence?: number;
 }
 
 export interface Risk {

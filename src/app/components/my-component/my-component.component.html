@@ -19,6 +19,7 @@
         <p>{{ year }}</p>
       </div>
     </div>
+    <h5>Key Results:</h5>
     <br />
     <!-- table T1 -->
     <table class="">
@@ -108,6 +109,12 @@
 
   <!-- right -->
   <div class="rightContainer">
+    <br>
+    <br>
+    <br>
+    <br>
+    <h5>Initiative</h5>
+    <h5>Risks:</h5>
     <table class="table-striped myTable">
       <thead>
         <tr>
@@ -132,10 +139,18 @@
           </td>
           <td *ngIf="!r.keyResultimpacted"></td>
           <td>
-            {{ r.impact }}
+            <select (change)="selectEditableImpact($event, r)">
+              <option *ngFor="let i of impact" value="{{ i }}">
+                {{ i }}
+              </option>
+            </select>
           </td>
           <td>
-            {{ r.likelihood }}
+            <select (change)="selectEditableLikelihood($event, r)">
+              <option *ngFor="let l of likeliHoods" value="{{ l }}">
+                {{ l }}
+              </option>
+            </select>
           </td>
           <td [ngClass]="addClasses(r)">
             {{ r.score }}
@@ -176,7 +191,7 @@
       </tbody>
     </table>
     <button (click)="insertRisk()" class="btn btn-default">
-      add KeyResult
+      add Risk
     </button>
   </div>
 </div>

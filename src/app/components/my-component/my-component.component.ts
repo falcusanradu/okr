@@ -48,6 +48,7 @@ export class MyComponentComponent implements OnInit {
       if (!this.keyResult.type) {
         this.keyResult.type = "NUMERICAL";
       }
+      this.keyResult.initialLevelOfConfidence = this.keyResult.levelOfConfidence;
       // execute
       this.keyResultList.push(this.keyResult);
       const lastElement: KeyResult = this.keyResultList[
@@ -74,26 +75,11 @@ export class MyComponentComponent implements OnInit {
     this.verifyRiskDropdownValues();
     // execute
     // calculate score
-    this.calculateScore();
+    this.calculateScore(this.risk);
 
     this.riskList.push(this.risk);
     // modify level of confidence
-    this.keyResultList.forEach(ks => {
-      if (
-        this.risk.keyResultimpacted &&
-        ks.id === this.risk.keyResultimpacted.id
-      ) {
-        ks.levelOfConfidence =
-          ks.levelOfConfidence - this.substractValueFromScore(this.risk.score);
-        if (ks.levelOfConfidence < 1) {
-          ks.levelOfConfidence = 1;
-        }
-        if (ks.levelOfConfidence > 9) {
-          ks.levelOfConfidence = 9;
-        }
-        ks.result = ks.levelOfConfidence * ks.target * 0.1;
-      }
-    });
+    this.updateLevelOfConfidence(this.risk);
     // reset
     this.risk = {
       id: this.initializeId(this.riskList),
@@ -104,10 +90,64 @@ export class MyComponentComponent implements OnInit {
     this.resetDropdowns();
   }
 
-  private calculateScore() {
+  // private updateLevelOfConfidence(): void {
+  //   this.keyResultList.forEach(ks => {
+  //     if (
+  //       this.risk.keyResultimpacted &&
+  //       ks.id === this.risk.keyResultimpacted.id
+  //     ) {
+  //       ks.levelOfConfidence =
+  //         ks.levelOfConfidence - this.substractValueFromScore(this.risk.score);
+  //       if (ks.levelOfConfidence < 1) {
+  //         ks.levelOfConfidence = 1;
+  //       }
+  //       if (ks.levelOfConfidence > 9) {
+  //         ks.levelOfConfidence = 9;
+  //       }
+  //       ks.result = ks.levelOfConfidence * ks.target * 0.1;
+  //     }
+  //   });
+  // }
+
+  private updateLevelOfConfidence(risk: Risk): void {
+    this.keyResultList.forEach(ks => {
+      if (
+        risk.keyResultimpacted &&
+        ks.id === risk.keyResultimpacted.id
+      ) {
+        ks.levelOfConfidence =
+          ks.levelOfConfidence - this.substractValueFromScore(risk.score);
+        if (ks.levelOfConfidence < 1) {
+          ks.levelOfConfidence = 1;
+        }
+        if (ks.levelOfConfidence > 9) {
+          ks.levelOfConfidence = 9;
+        }
+        ks.result = ks.levelOfConfidence * ks.target * 0.1;
+      }
+    });
+  }
+
+
+  // private calculateScore() {
+  //   const result =
+  //     this.convertImpactAndLikelihoodToNumbers(this.risk.impact) +
+  //     this.convertImpactAndLikelihoodToNumbers(this.risk.likelihood);
+  //   let score;
+  //   if (result <= 3) {
+  //     score = "Low";
+  //   } else if (result === 4) {
+  //     score = "Medium";
+  //   } else {
+  //     score = "High";
+  //   }
+  //   this.risk.score = score;
+  // }
+
+  private calculateScore(risk: Risk): Risk {
     const result =
-      this.convertImpactAndLikelihoodToNumbers(this.risk.impact) +
-      this.convertImpactAndLikelihoodToNumbers(this.risk.likelihood);
+      this.convertImpactAndLikelihoodToNumbers(risk.impact) +
+      this.convertImpactAndLikelihoodToNumbers(risk.likelihood);
     let score;
     if (result <= 3) {
       score = "Low";
@@ -116,7 +156,8 @@ export class MyComponentComponent implements OnInit {
     } else {
       score = "High";
     }
-    this.risk.score = score;
+    risk.score = score;
+    return risk;
   }
 
   private substractValueFromScore(value: string) {
@@ -152,6 +193,20 @@ export class MyComponentComponent implements OnInit {
 
   selectLikelihood(event) {
     this.risk.likelihood = event.target.value;
+  }
+
+  selectEditableImpact(event, risk: Risk) {
+    risk.impact = event.target.value;
+    risk.keyResultimpacted.levelOfConfidence = risk.keyResultimpacted.initialLevelOfConfidence;
+    risk = this.calculateScore(risk);
+    this.updateLevelOfConfidence(risk);
+  }
+
+  selectEditableLikelihood(event, risk: Risk) {
+    risk.likelihood = event.target.value;
+    risk.keyResultimpacted.levelOfConfidence = risk.keyResultimpacted.initialLevelOfConfidence;
+    risk = this.calculateScore(risk);
+    this.updateLevelOfConfidence(risk);
   }
 
   private verifyRiskDropdownValues(): void {
