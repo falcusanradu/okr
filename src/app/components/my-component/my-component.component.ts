@@ -122,11 +122,11 @@ export class MyComponentComponent implements OnInit {
   private substractValueFromScore(value: string) {
     let scoreValue = 0;
     if (value === "Low") {
-      scoreValue = -1;
+      scoreValue = 1;
     } else if (value === "Medium") {
-      scoreValue = -2;
+      scoreValue = 2;
     } else if (value === "High") {
-      scoreValue = -3;
+      scoreValue = 3;
     }
     return scoreValue;
   }
@@ -217,9 +217,9 @@ export class MyComponentComponent implements OnInit {
     return classes;
   }
 
-  private isRed(value: any): boolean {
+  private isGreen(value: any): boolean {
     if (value.levelOfConfidence) {
-      if (value.levelOfConfidence <= 3) {
+      if (value.levelOfConfidence > 6) {
         return true;
       }
     }
@@ -245,9 +245,9 @@ export class MyComponentComponent implements OnInit {
     return false;
   }
 
-  private isGreen(value: any): boolean {
+  private isRed(value: any): boolean {
     if (value.levelOfConfidence) {
-      if (value.levelOfConfidence > 6) {
+      if (value.levelOfConfidence <= 3) {
         return true;
       }
     }
